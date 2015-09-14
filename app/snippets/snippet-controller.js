@@ -1,10 +1,16 @@
 (function () {
   "use strict"
-  var controller = ["SnippetService", "$scope", "$timeout", function (service, scope, $timeout) {
+  var controller = ["SnippetService","Runner", "$scope", "$timeout", function (service, runner, scope, $timeout) {
     var
         editor = {
-          snippet: null
+          snippet: null,
+          console : {
+            messages: [],
+            errors: [],
+          },
+          run : null
         },
+
         editorOptions = {
           mode: "text/x-java",
 
@@ -29,9 +35,17 @@
         setSnippet = function (code) {
           editor.snippet = code;
           $timeout(setCodeMirror);
+        },
+        showResult = function(message){
+          editor.console.messages.push(message);
+        },
+        run = function(){
+          runner.run(editor.snippet).then(showResult);
         };
 
     service.getSnippet("hello-world").then(setSnippet);
+
+    editor.run = run;
     scope.editor = editor;
   }];
 

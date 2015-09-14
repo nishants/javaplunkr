@@ -17,6 +17,7 @@
     <script src="app/chakra.js"></script>
     <script src="app/snippets/service.js"></script>
     <script src="app/snippets/snippet-controller.js"></script>
+    <script src="app/snippets/runner.js"></script>
 </head>
 <body ng-app="chakra">
 <div id="ide" ng-controller="EditorController">
@@ -30,12 +31,16 @@
     <div id="action-buttons"
          class="text-right-aligned">
         <button id="run-button"
-                class="grey-text">run</button>
+                class="grey-text"
+                ng-click="editor.run()">run</button>
     </div>
     <div id="console"
          class="bordered">
         <div class="bordered bg-grey strip">console</div>
-        <div id="console-output" class="strip"></div>
+        <div id="console-output" class="strip">
+            <p ng-repeat="message in editor.console.messages"
+               ng-bind="message"
+               class="no-margin"></p></div>
         <div id="error-output" class="strip"></div>
     </div>
 </div>

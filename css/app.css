@@ -65,6 +65,10 @@ div{
     color: #666666;
 }
 
+.no-margin{
+  margin: 0;
+}
+
 #loader{
     display: none;
     position: absolute;
