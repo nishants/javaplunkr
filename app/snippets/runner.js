@@ -1,6 +1,6 @@
 (function () {
   "use strict"
-  var runner = ["$http", function ($http) {
+  var runner = ["$http", "$q", function ($http, $q) {
 
     var data = function (code) {
           var response = {
@@ -13,12 +13,16 @@
         },
         remote = "https://boiling-scrubland-7787.herokuapp.com",
         compilerAndRun = function (code) {
-          return $http.post(remote + "/runner/main", data(code)).then(function(response){
+          var message = function (response) {
+            if (response.data.error) {
+              return $q.reject(response.data.error)
+            }
             return response.data.content.console[0];
-          });
+          };
+          return $http.post(remote + "/runner/main", data(code)).then(message);
         };
     return {
-      run : compilerAndRun
+      run: compilerAndRun
     };
   }];
 

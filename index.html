@@ -21,12 +21,11 @@
 </head>
 <body ng-app="chakra">
 <div id="ide" ng-controller="EditorController">
-    <pre>{{editor.snippet}}</pre>
     <div class="grey-text bg-grey strip">HelloWorld.java</div>
     <div id="editor"
          class="bordered">
          <textarea id="code-editor"
-                   class="editor" >{{editor.snippet}}</textarea>
+                   class="editor" ng-model="editor.snippet"></textarea>
     </div>
     <div id="action-buttons"
          class="text-right-aligned">
@@ -41,12 +40,17 @@
             <p ng-repeat="message in editor.console.messages"
                ng-bind="message"
                class="no-margin"></p></div>
-        <div id="error-output" class="strip"></div>
+        <div id="error-output" class="strip">
+            <p ng-repeat="message in editor.console.errors"
+               ng-bind="message"
+               class="no-margin"></p>
+        </div>
+    </div>
+    <div id="loader" ng-show="editor.loader">
+        <div id="loader-image"></div>
     </div>
 </div>
-<div id="loader">
-    <div id="loader-image"></div>
-</div>
+
 
 </body>
 </html>

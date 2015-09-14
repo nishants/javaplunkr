@@ -2,15 +2,6 @@
   "use strict"
   var controller = ["SnippetService","Runner", "$scope", "$timeout", function (service, runner, scope, $timeout) {
     var
-        editor = {
-          snippet: null,
-          console : {
-            messages: [],
-            errors: [],
-          },
-          run : null
-        },
-
         editorOptions = {
           mode: "text/x-java",
 
@@ -22,25 +13,45 @@
           smartIndent: true,
           autofocus: true,
           viewportMargin: Infinity, // renders whole document at once (else only part in view is rendered, and text searches wont work)
-         },
-        showError = function (err) {
-          alert(err);
         },
-        editorElement = function(){
-          return document.getElementById("code-editor")
+        editor = {
+          snippet: null,
+          console : {
+            messages: [],
+            errors: [],
+          },
+          window: CodeMirror.fromTextArea(document.getElementById("code-editor"), editorOptions),
+          loading: false,
+
+          //methods
+          run : undefined,
         },
-        setCodeMirror = function () {
-          CodeMirror.fromTextArea(editorElement(), editorOptions);
+        showLoader = function(show){
+          editor.loader = show;
         },
         setSnippet = function (code) {
-          editor.snippet = code;
-          $timeout(setCodeMirror);
+          $timeout(function(){
+            editor.window.getDoc().setValue(code);
+          });
         },
+        getSnippet = function () {
+          return editor.window.getDoc().getValue();
+        },
+
         showResult = function(message){
           editor.console.messages.push(message);
+          showLoader(false);
+        },
+        showError = function(message){
+          editor.console.errors.push(message + getSnippet());
+          showLoader(false);
         },
         run = function(){
-          runner.run(editor.snippet).then(showResult);
+          showLoader(true);
+          editor.console.errors = [];
+          editor.console.messages = [];
+
+          runner.run(getSnippet()).then(showResult, showError);
         };
 
     service.getSnippet("hello-world").then(setSnippet);
