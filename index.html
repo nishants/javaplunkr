@@ -10,23 +10,22 @@
     <script src="libs/codemirror/codemirror.js"></script>
     <script src="mode/clike.js"></script>
     <script src="libs/codemirror/formatting.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
 
     <script src="libs/jquery.js"></script>
-    <script src="js/app.js"></script>
+    <script src="app/chakra.js"></script>
+    <script src="app/snippets/service.js"></script>
+    <script src="app/snippets/snippet-controller.js"></script>
 </head>
-<body>
-<div id="ide">
+<body ng-app="chakra">
+<div id="ide" ng-controller="EditorController">
+    <pre>{{editor.snippet}}</pre>
     <div class="grey-text bg-grey strip">HelloWorld.java</div>
     <div id="editor"
          class="bordered">
-         <textarea id="editor1"
-                   class="editor">
-public class HelloWorld {
-  public static void main(String... args){
-    System.out.println("hello");
-  }
-}
-        </textarea>
+         <textarea id="code-editor"
+                   class="editor" >{{editor.snippet}}</textarea>
     </div>
     <div id="action-buttons"
          class="text-right-aligned">
